@@ -7,7 +7,7 @@ import java.util.List;
 
 import vdll.data.msql.SqlTags.RowTags;
 import vdll.tools.DateTime;
-import vdll.tools.ReflectBuild;
+import vdll.tools.ReflectUtil;
 
 /**
  * 数据库  对象类
@@ -196,13 +196,13 @@ public class MySqlBuild<T> extends MySql {
 		ResultSet rs = exeQ();
 		try {
 			while (rs.next()) {
-				T vu = (T) ReflectBuild.newInstance(mcls,new Class[]{}, new Object[] {});
+				T vu = (T) ReflectUtil.newInstance(mcls,new Class[]{}, new Object[] {});
 				AISql.Parms par = new AISql.Parms();
 				List<RowTags> valRow = SqlTags.get(mcls,par);
 				for (int i = 0; i < valRow.size(); i++) {
 					String objField = valRow.get(i).getName();
 					String vs = rs.getString(objField);
-					Field field = ReflectBuild.getFieldAll(mcls, objField);
+					Field field = ReflectUtil.getFieldAll(mcls, objField);
 					field.set(vu, vs);
 				}			
 				list.add(vu);
@@ -378,7 +378,7 @@ public class MySqlBuild<T> extends MySql {
 
 		for (int i = 0; i < valRow.size(); i++) {
 			//Object val =valRow.get(i).getValue();
-			Object val = ReflectBuild.getFieldValue(t, valRow.get(i).getField());
+			Object val = ReflectUtil.getFieldValue(t, valRow.get(i).getField());
 			if(val == null) continue;
 			tableName.add( valRow.get(i).getName());
 			tableValue.add(val);
@@ -477,7 +477,7 @@ public class MySqlBuild<T> extends MySql {
 		List<Object> tableName = new ArrayList<>();
 		List<Object> tableValue = new ArrayList<>();
 		for (int i = 0; i < valRow.size(); i++) {
-			Object val = ReflectBuild.getFieldValue(t, valRow.get(i).getField());
+			Object val = ReflectUtil.getFieldValue(t, valRow.get(i).getField());
 			if(val == null) continue;
 			tableName.add( valRow.get(i).getName());
 			tableValue.add(val);

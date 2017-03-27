@@ -208,7 +208,7 @@ public class CompareUtil<T> {
 	}
 	
 	/**
-	 * 反射属性      更多的反射请参见    当前包d.ReflectBuild
+	 * 反射属性      更多的反射请参见    当前包d.ReflectUtil
 	 * @author Hocean  @version 2016年9月6日 下午3:10:36.
 	 *
 	 */
