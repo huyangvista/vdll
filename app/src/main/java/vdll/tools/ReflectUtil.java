@@ -81,7 +81,15 @@ public class ReflectUtil {
         return newoneClass;
     }
 
-
+    public static Class<?> getClassFromNameNoStatic(String className){
+        Class<?> newoneClass = null;
+        try {
+            newoneClass = Thread.currentThread().getContextClassLoader().loadClass(className);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return newoneClass;
+    }
     //关于构造
 
     /**
@@ -1274,37 +1282,40 @@ public class ReflectUtil {
         return cls.isInstance(obj);
     }
 
-    public static List<String> getPackageClassByAndroidAll(Object context, String packageName) {
-        List<String> classNameList = new ArrayList<>();
+    private static Enumeration<String> getPackageClassByAndroidAllEnum(Object context) {
+        Enumeration<String> enumeration = null;
         try {
-            classNameList = getPackageClassByAndroidAll(context);
             Object pcp = invokeMethod(context, "getPackageCodePath", new Class[0], new Object[0]); //DexFile
             Object df = newInstance(getClassFromName("dalvik.system.DexFile"), new Class<?>[]{String.class}, new Object[]{pcp});
-            Enumeration<String> enumeration = (Enumeration<String>) invokeMethod(df, "entries", new Class[0], new Object[0]);//获取df中的元素  这里包含了所有可执行的类名 该类名包含了包名+类名的方式
+            enumeration = (Enumeration<String>) invokeMethod(df, "entries", new Class[0], new Object[0]);//获取df中的元素  这里包含了所有可执行的类名 该类名包含了包名+类名的方式
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return enumeration;
+    }
+
+    public static List<String> getPackageClassByAndroidAll(Object context, String packageName) {
+        List<String> classNameList = new ArrayList<>();
+        Enumeration<String> enumeration = getPackageClassByAndroidAllEnum(context);
+        if (enumeration != null) {
             while (enumeration.hasMoreElements()) {//遍历
                 String className = enumeration.nextElement();
                 if (className.contains(packageName)) {
                     classNameList.add(className);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return classNameList;
     }
 
     public static List<String> getPackageClassByAndroidAll(Object context) {
         List<String> classNameList = new ArrayList<>();
-        try {
-            Object pcp = invokeMethod(context, "getPackageCodePath", new Class[0], new Object[0]); //DexFile
-            Object df = newInstance(getClassFromName("dalvik.system.DexFile"), new Class<?>[]{String.class}, new Object[]{pcp});
-            Enumeration<String> enumeration = (Enumeration<String>) invokeMethod(df, "entries", new Class[0], new Object[0]);//获取df中的元素  这里包含了所有可执行的类名 该类名包含了包名+类名的方式
+        Enumeration<String> enumeration = getPackageClassByAndroidAllEnum(context);
+        if (enumeration != null) {
             while (enumeration.hasMoreElements()) {//遍历
                 String className = enumeration.nextElement();
                 classNameList.add(className);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return classNameList;
     }
