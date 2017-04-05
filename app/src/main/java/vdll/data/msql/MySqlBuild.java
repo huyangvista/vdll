@@ -18,9 +18,6 @@ import vdll.tools.ReflectUtil;
 public class MySqlBuild<T> extends MySql {
 	
 	public static void main(String[] args) {
-
-		
-		
 		
 		User user = new User();user.name = "123";user.psword = "456";user.address = "789";user.id = "1";
 		User userNew = new User();userNew.name = "abc";userNew.psword = "dce";userNew.address = "fgh";
