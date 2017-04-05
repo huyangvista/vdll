@@ -16,25 +16,25 @@ import vdll.tools.ReflectUtil;
  * @version 2016-11-08 14:43:56
  */
 public class MySqlBuild<T> extends MySql {
-	
+
 	public static void main(String[] args) {
-		
+
 		User user = new User();user.name = "123";user.psword = "456";user.address = "789";user.id = "1";
 		User userNew = new User();userNew.name = "abc";userNew.psword = "dce";userNew.address = "fgh";
 		User userUpdate = new User();userUpdate.id = "1";
-				
+
 		MySqlBuild<User> vmysql = new MySqlBuild<>(User.class);
 		vmysql.open();
 		System.out.println("-----------------------------------------返回值：");
 		System.out.println(    vmysql.create()     		 			 +"   -2已存在 -1 失败  0成功 ");
 		System.out.println(    vmysql.add(user)     	  			 +"   返回影响行数");
 		System.out.println(    vmysql.get(user).get(0).psword        +"   返回列表");
-		System.out.println(    vmysql.update(userNew, user)          +"   返回影响行数"); 
+		System.out.println(    vmysql.update(userNew, user)          +"   返回影响行数");
 		System.out.println(    vmysql.get().get(0).psword            +"   返回单个元素");
 		System.out.println(    vmysql.delete(user)                   +"   返回影响行数");
 		System.out.println(    vmysql.drop()                         +"   不存在返回 -2  失败返回 -1  成功返回 0");
-		System.out.println(    vmysql.exist()                        +"   存在  true");	
-		vmysql.close();		
+		System.out.println(    vmysql.exist()                        +"   存在  true");
+		vmysql.close();
 		System.out.println("-----------------------------------------可以获取Sql语句：");
 		MySqlBuild<User> msql = new MySqlBuild<>(User.class); //实例 SQL 语句
 		System.out.println(msql.createSql());     //一些数据库语句
@@ -42,12 +42,12 @@ public class MySqlBuild<T> extends MySql {
 		System.out.println(msql.getSql());
 		System.out.println(msql.deleteSql(user));
 		System.out.println(msql.getSql(user));
-		System.out.println(msql.updateSql(userNew,user));	
-		System.out.println(msql.dropSql());	
+		System.out.println(msql.updateSql(userNew,user));
+		System.out.println(msql.dropSql());
 		msql.open();  //开启数据库
 		msql.create();
 		msql.add(user);  //添加数据
-		user = msql.get(userUpdate).get(0); //按U查询 并获取第一个用户		
+		user = msql.get(userUpdate).get(0); //按U查询 并获取第一个用户
 		msql.update(userNew, userUpdate);  //根据 不为空的字段 更新
 		msql.delete(userUpdate);  //根据字段 删除
 		System.out.println("-----------------------------------------插入600次数据分别用时：");
@@ -57,7 +57,7 @@ public class MySqlBuild<T> extends MySql {
 				msql.add(userNew);  //添加数据
 			}
 			System.out.println(DateTime.subtract(new DateTime(), dt).getMilliSecondsCount());
-		}	
+		}
 		{	//开启事务
 			DateTime dt = new DateTime();
 			msql.setAutoCommit(false);
@@ -66,12 +66,12 @@ public class MySqlBuild<T> extends MySql {
 			}
 			msql.commit();
 			System.out.println(DateTime.subtract(new DateTime(), dt).getMilliSecondsCount());
-		}				
+		}
 		msql.drop();
 		msql.close(); //关闭
-		
+
 	}
-	
+
 	public List<RowTags> valRow = new ArrayList<>(); // 所有带标记
 //	public List<RowTags> valRowAll = new ArrayList<>(); // 全部
 //	public List<RowTags> valRowKey = new ArrayList<>(); // 所有主键
@@ -79,7 +79,7 @@ public class MySqlBuild<T> extends MySql {
 //	public List<RowTags> valRowAi = new ArrayList<>(); // 仅有自增的主键
 //	public List<RowTags> valRowNoAi = new ArrayList<>(); // 仅没有自增的主键
 //	public List<RowTags> valRowKeyAndNoAi = new ArrayList<>(); // 所有主键
-	
+
 	public List<T> vlist; //输出列表
 	//private List<Integer> vlistIndex;
 
@@ -87,7 +87,7 @@ public class MySqlBuild<T> extends MySql {
 	//private String[] tableRow;
 
 	String tabName = ""; //表名称
-	
+
 	/**
 	 * 构造
 	 * @param cls
@@ -114,7 +114,10 @@ public class MySqlBuild<T> extends MySql {
 	 * @param vmsql
 	 */
 	public MySqlBuild(Class<T> cls, MySql vmsql) {
-		this(cls);
+		this(cls,cls.getSimpleName(),vmsql);
+	}
+	public MySqlBuild(Class<T> cls,String tabName, MySql vmsql) {
+		this(cls,tabName);
 		super.setConn(vmsql.getConn());
 		super.setPst(vmsql.getPst());
 		super.setRs(vmsql.getRs());
@@ -128,7 +131,7 @@ public class MySqlBuild<T> extends MySql {
 		AISql.Parms par = new AISql.Parms();
 		valRow = SqlTags.get(mcls,par);
 	}
-	
+
 	/**
 	 * -1 失败  0成功 -2已存在
 	 * @return
@@ -201,7 +204,7 @@ public class MySqlBuild<T> extends MySql {
 					String vs = rs.getString(objField);
 					Field field = ReflectUtil.getFieldAll(mcls, objField);
 					field.set(vu, vs);
-				}			
+				}
 				list.add(vu);
 			}
 		}
@@ -225,7 +228,7 @@ public class MySqlBuild<T> extends MySql {
 	}
 
 	/**
-	 * 删除数据表  
+	 * 删除数据表
 	 * @return 不存在返回 -2  失败返回 -1 成功返回 0
 	 */
 	public int drop() {
@@ -269,7 +272,7 @@ public class MySqlBuild<T> extends MySql {
 			ResultSet rs = vexeQ();
 			if (rs.next())
 			{
-		
+
 			}
 			exist = true;
 		}
@@ -295,7 +298,7 @@ public class MySqlBuild<T> extends MySql {
 			ResultSet rs = vexeQ();
 			if (rs.next())
 			{
-		
+
 			}
 			exist = true;
 		}
@@ -328,7 +331,7 @@ public class MySqlBuild<T> extends MySql {
 				sb.append(", ").append(Integer.toString(valRow.get(i).getAitag().number()));
 			}
 			sb.append(") ");
-			
+
 			//能否为空
 			if (valRow.get(i).getAitag().isNoNull() || valRow.get(i).getAitag().isPrimaryKey()) {
 				sb.append(" NOT NULL");
@@ -348,7 +351,7 @@ public class MySqlBuild<T> extends MySql {
 			sb.append(",");
 		}
 		//添加主键
-		if (valRow.size() > 0) {			
+		if (valRow.size() > 0) {
 			sb.append(" PRIMARY KEY (");
 			for (int i = 0; i < valRow.size(); i++) {
 				if (valRow.get(i).getAitag().isPrimaryKey()) {
@@ -357,7 +360,7 @@ public class MySqlBuild<T> extends MySql {
 			}
 			sb.delete(sb.length() - 1, sb.length());
 			sb.append(")");
-			
+
 		}
 		sb.append(" ) ");
 		return sb.toString();
@@ -369,7 +372,7 @@ public class MySqlBuild<T> extends MySql {
 	 * @return
 	 */
 	public String addSql(T t) {
-		
+
 		List<Object> tableName = new ArrayList<>();
 		List<Object> tableValue = new ArrayList<>();
 
@@ -409,7 +412,7 @@ public class MySqlBuild<T> extends MySql {
 	 * @param t
 	 * @return
 	 */
-	public String getSql(T t) {	
+	public String getSql(T t) {
 		String sql = String.format("SELECT * FROM `%s` WHERE (%s);", tabName, sqlJoin(t,"&&"));
 		return sql;
 	}
@@ -420,7 +423,7 @@ public class MySqlBuild<T> extends MySql {
 	 * @return
 	 */
 	public String deleteSql(T t) {
-	
+
 		String sql = String.format("DELETE FROM `%s` WHERE (%s);", tabName, sqlJoin(t,"&&"));
 		return sql;
 	}
@@ -440,7 +443,7 @@ public class MySqlBuild<T> extends MySql {
 	 * @param tif
 	 * @return
 	 */
-	public String updateSql(T tnew, T tif) {		
+	public String updateSql(T tnew, T tif) {
 
 		String sql = String.format("UPDATE `%s` SET %s WHERE (%s);", tabName, sqlJoin(tnew,","), sqlJoin(tif,"&&"));
 		return sql;
@@ -462,8 +465,8 @@ public class MySqlBuild<T> extends MySql {
 	public String existSqlDB() {
 		String sql = String.format("SHOW CREATE DATABASE  `%s`", databaseName);
 		return sql;
-	}  
-	
+	}
+
 	/**
 	 * sql语句 连接（部分） 只针对条件语句
 	 * @param t
@@ -488,7 +491,7 @@ public class MySqlBuild<T> extends MySql {
 		}
 		if(tableName.size() > 0){
 			sb.delete(sb.length() - join.length(), sb.length());
-		}		
+		}
 		return sb.toString();
 	}
 	//-------------------------------------------------      合成语句          --------------
