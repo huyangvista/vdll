@@ -1,6 +1,7 @@
 package vdll.data.msql;
 
-import vdll.utils.FileOperate;
+import vdll.data.dbc.DBCP;
+import vdll.utils.io.FileOperate;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -13,8 +14,13 @@ public class MySqlString {
         return "show TABLES";
     }
 
-    public static String showColumn(String tabName, String dbName) {
-        return String.format("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE table_name = '%s' AND table_schema = '%s'", tabName, dbName);
+    public static String showColumn(String tableName, String databaseName) {
+        return String.format("SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE table_name = '%s' AND table_schema = '%s'", tableName, databaseName);
+    }
+
+    public static String existSqlDB(String databaseName) {
+        String sql = String.format("SHOW CREATE DATABASE  `%s`", databaseName);
+        return sql;
     }
 
 
@@ -51,7 +57,7 @@ public class MySqlString {
             sb.append("public class " + tabNames[i] + "{");
             sb.append("\r\n");
             sb.append("\r\n");
-            mySql.exeQ(MySqlString.showColumn(tabNames[i], mySql.getDatabaseName()));
+            mySql.exeQ(MySqlString.showColumn(tabNames[i], DBCP.dbProp.getDatabaseName()));
             list = mySql.getParms();
             for (int j = 0; j < list.size(); j++) {
                 Map<String, Object> map = list.get(j);

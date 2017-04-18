@@ -57,21 +57,21 @@ public class SqlTags implements Iterable<SqlTags.RowTags> {
 			if (fi.isAnnotationPresent(AISql.class)) // 含有标记
 			{
 				vtr.setAitag(fi.getAnnotation(AISql.class)); // 得到注解
-				boolean id = ap.id==null?true:vtr.getAitag().id() == ap.id;
-				boolean value = ap.value==null?true:vtr.getAitag().value() .equals(ap.value);
+				boolean id = ap.id == null || vtr.getAitag().id() == ap.id;
+				boolean value = ap.value == null || vtr.getAitag().value().equals(ap.value);
 
-				boolean field = ap.field==null?true:vtr.getAitag().field().equals(ap.field);
-				boolean type = ap.type==null?true:vtr.getAitag().type() .equals(ap.type);
-				boolean length = ap.length==null?true:vtr.getAitag().length() == ap.length;
-				boolean number = ap.number==null?true:vtr.getAitag().number() == ap.number;
-				boolean noNull = ap.noNull==null?true:vtr.getAitag().isNoNull() == ap.noNull;
-				boolean primaryKey = ap.primaryKey==null?true:vtr.getAitag().isPrimaryKey() == ap.primaryKey;
+				boolean field = ap.field == null || vtr.getAitag().field().equals(ap.field);
+				boolean type = ap.type == null || vtr.getAitag().type().equals(ap.type);
+				boolean length = ap.length == null || vtr.getAitag().length() == ap.length;
+				boolean number = ap.number == null || vtr.getAitag().number() == ap.number;
+				boolean noNull = ap.noNull == null || vtr.getAitag().isNoNull() == ap.noNull;
+				boolean primaryKey = ap.primaryKey == null || vtr.getAitag().isPrimaryKey() == ap.primaryKey;
 
-				boolean defParm = ap.defParm==null?true:vtr.getAitag().defParm().equals(ap.defParm);
-				boolean note = ap.note==null?true:vtr.getAitag().note().equals(ap.note);
-				boolean autoAdd = ap.autoAdd==null?true:vtr.getAitag().isAutoAdd() == ap.autoAdd;
-				boolean noMark = ap.noMark==null?true:vtr.getAitag().isNoMark() == ap.noMark;
-				boolean fillZero = ap.fillZero==null?true:vtr.getAitag().isFillZero() == ap.fillZero;
+				boolean defParm = ap.defParm == null || vtr.getAitag().defParm().equals(ap.defParm);
+				boolean note = ap.note == null || vtr.getAitag().note().equals(ap.note);
+				boolean autoAdd = ap.autoAdd == null || vtr.getAitag().isAutoAdd() == ap.autoAdd;
+				boolean noMark = ap.noMark == null || vtr.getAitag().isNoMark() == ap.noMark;
+				boolean fillZero = ap.fillZero == null || vtr.getAitag().isFillZero() == ap.fillZero;
 
 				if(id && value &&     field && type && length && number && noNull && primaryKey &&   
 						defParm && note && autoAdd && noMark && fillZero ){

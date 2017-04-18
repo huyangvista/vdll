@@ -141,7 +141,7 @@ enum Kind {
         extension.getClass(); // null check
         this.extension = extension;
     }
-};
+}
 
 enum ETag
 {
