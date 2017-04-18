@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import vdll.data.msql.SqlTags.RowTags;
-import vdll.tools.DateTime;
-import vdll.tools.ReflectUtil;
+import vdll.utils.ReflectUtil;
+import vdll.utils.time.DateTime;
+
 
 /**
  * 数据库  对象类

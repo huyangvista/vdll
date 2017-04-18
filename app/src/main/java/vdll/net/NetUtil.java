@@ -1,7 +1,5 @@
 package vdll.net;
 
-import com.sun.net.httpserver.BasicAuthenticator;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -112,7 +110,7 @@ public class NetUtil {
             //代理 如果存在账号密码
             if(username != null && password != null ){
                 String headerKey = "Proxy-Authorization";
-                String headerValue = "Basic " + vdll.tools.Base64.encode(username + ":" + password);
+                String headerValue = "Basic " + vdll.utils.Base64.encode(username + ":" + password);
                 connection.setRequestProperty(headerKey, headerValue);
             }
 
@@ -179,7 +177,7 @@ public class NetUtil {
             //代理 如果存在账号密码
             if(username != null && password != null ){
                 String headerKey = "Proxy-Authorization";
-                String headerValue = "Basic " + vdll.tools.Base64.encode(username + ":" + password);
+                String headerValue = "Basic " + vdll.utils.Base64.encode(username + ":" + password);
                 connection.setRequestProperty(headerKey, headerValue);
             }
 
@@ -233,7 +231,7 @@ public class NetUtil {
         System.setProperty("http.proxyPort", Integer.toString(port));
     }
     //设置全局代理JVM 级别 用户
-    public static void setGlobalProxyUser(String username, String password){
+    public static void setGlobalProxyUser(final String username, final String password){
         Authenticator.setDefault(new Authenticator(){
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {

@@ -16,7 +16,7 @@ public class RandomTest
 		int[] vi = vrandom(6,9);
 		for (int i : vi)
 		{
-			vdll.tools.Console.WriteLine(i);
+			vdll.debug.Console.WriteLine(i);
 		}
 	}
 	
@@ -45,7 +45,7 @@ public class RandomTest
     public static int[] vrandom(int vn, int viMax) 
     {
     	if(vn > viMax)  {
-    		vdll.tools.Console.ErrLine("数字最大值  必须大于需要数字");
+    		vdll.debug.Console.ErrLine("数字最大值  必须大于需要数字");
     		return null;
     	}
     	
